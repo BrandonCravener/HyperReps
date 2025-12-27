@@ -1,0 +1,6 @@
+@HyperReps.API_HostAddress = http://localhost:5186
+
+GET {{HyperReps.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

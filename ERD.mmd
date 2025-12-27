@@ -1,0 +1,82 @@
+erDiagram
+    %% CORE USER MANAGEMENT
+    USER {
+        uuid id PK
+        string spotify_id UK "External Spotify User ID"
+        string email
+        string display_name
+        string avatar_url
+        string access_token "Encrypted"
+        string refresh_token "Encrypted"
+        timestamp token_expiry
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    %% SPOTIFY DATA CACHING
+    %% Local cache of track metadata
+    TRACK {
+        uuid id PK
+        string spotify_track_id UK
+        string title
+        string artist_name
+        string album_name
+        string album_art_url
+        int duration_ms
+        string preview_url "Optional 30s preview"
+    }
+
+    %% PLAYLIST IMPORTING
+    %% Updated with Sync Status fields
+    PLAYLIST {
+        uuid id PK
+        uuid user_id FK
+        string spotify_playlist_id
+        string name
+        string description
+        string thumbnail_url
+        boolean is_sync_active "If true, auto-update from Spotify"
+        string sync_status "IDLE, QUEUED, SYNCING, FAILED"
+        string last_error_message "For UI feedback if sync fails"
+        timestamp last_synced_at
+    }
+
+    %% JOIN TABLE: PLAYLIST <-> TRACK
+    PLAYLIST_TRACK {
+        uuid playlist_id PK, FK
+        uuid track_id PK, FK
+        int added_at_timestamp
+    }
+
+    %% MIX CREATION
+    MIX {
+        uuid id PK
+        uuid user_id FK
+        string name
+        string thumbnail_url
+        string description
+        boolean is_public
+        int total_duration_ms
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    %% MIX SEGMENTS
+    %% Defines the start/stop times and order
+    MIX_SEGMENT {
+        uuid id PK
+        uuid mix_id FK
+        uuid track_id FK
+        int start_time_ms "Crop start point"
+        int end_time_ms "Crop end point"
+        int sequence_order "Position: 0, 1, 2..."
+        int crossfade_duration_ms
+    }
+
+    %% RELATIONSHIPS
+    USER ||--o{ PLAYLIST : "imports"
+    USER ||--o{ MIX : "creates"
+    PLAYLIST ||--|{ PLAYLIST_TRACK : "contains"
+    TRACK ||--o{ PLAYLIST_TRACK : "included_in"
+    MIX ||--|{ MIX_SEGMENT : "composed_of"
+    TRACK ||--o{ MIX_SEGMENT : "referenced_by"

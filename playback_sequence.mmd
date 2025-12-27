@@ -1,0 +1,38 @@
+sequenceDiagram
+    participant User
+    participant Main as Main Thread (UI & Spotify SDK)
+    participant Worker as Web Worker (The Conductor)
+    participant Spotify as Spotify Cloud
+
+    Note over Main, Worker: INITIALIZATION
+    User->>Main: Tap "Play Mix"
+    Main->>Worker: POST: StartMix(MixData)
+    Worker->>Worker: Initialize Internal Clock
+    
+    Note over Main, Worker: STARTING TRACK 1
+    Worker->>Main: MSG: Play(TrackA, Start: 10s)
+    Main->>Spotify: SDK: player.play({ uri: TrackA, position_ms: 10000 })
+    Spotify-->>Main: Audio Starts
+
+    Note over Main, Worker: PLAYBACK MONITORING
+    loop Every 1 Second
+        Worker->>Worker: Check Elapsed Time
+        Main-->>Worker: (Optional) Sync State/Drift Correction
+    end
+
+    Note over Main, Worker: TRACK TRANSITION (The "Hard Cut")
+    
+    Note right of Worker: Target End Time: 45s
+    
+    Worker->>Worker: Timer hits 44.5s (Pre-fetch Buffer)
+    
+    Worker->>Main: MSG: PreloadNext(TrackB)
+    Main->>Main: (Optimistic UI Update: Show Next Song)
+    
+    Worker->>Worker: Timer hits 45.0s (EXACT CUT)
+    Worker->>Main: MSG: CutTo(TrackB, Start: 0s)
+    
+    Main->>Spotify: SDK: player.play({ uri: TrackB, position_ms: 0 })
+    Note right of Main: Network latency determines gap duration (100-300ms)
+    
+    Spotify-->>Main: Audio Switches to Track B

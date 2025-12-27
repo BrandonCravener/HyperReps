@@ -1,0 +1,48 @@
+C4Container
+    title Container Diagram for HyperReps (Grouped Architecture)
+
+    Person(user, "User", "Music lover creating mixes")
+    System_Ext(spotify, "Spotify API", "Music Metadata & Audio")
+
+    System_Boundary(b1, "HyperReps Platform") {
+        
+        %% FRONTEND LAYER
+        Boundary(b_frontend, "Frontend Layer") {
+            Container(webapp, "Single Page App", "Angular", "Mix editor & Player")
+        }
+
+        %% BACKEND COMPUTE LAYER
+        Boundary(b_compute, "Backend Services") {
+            Container(api, "API Server", "ASP.NET Core", "Auth, Logic, Presigning")
+            Container(worker, "Sync Worker", "ASP.NET Service", "Background sync")
+        }
+
+        %% DATA PERSISTENCE LAYER
+        Boundary(b_data, "Data Persistence") {
+            ContainerDb(db, "Main Database", "PostgreSQL", "Users, Mixes, Tracks")
+            ContainerDb(redis, "Redis Cache", "Redis", "Job queues")
+            ContainerDb(s3, "Object Storage", "Cloudflare R2", "Thumbnails")
+        }
+    }
+
+    %% RELATIONSHIPS
+
+    %% 1. User Interaction
+    Rel(user, webapp, "Uses", "HTTPS")
+    Rel(webapp, spotify, "Streams Audio", "EME/DRM")
+
+    %% 2. Frontend <-> Backend
+    Rel(webapp, api, "API Requests", "JSON/HTTPS")
+    Rel(webapp, s3, "Direct Upload/Download", "HTTPS")
+
+    %% 3. Compute <-> Data (API)
+    Rel(api, db, "Reads/Writes", "EF Core")
+    Rel(api, redis, "Enqueues Jobs", "BullMQ")
+    Rel(api, s3, "Gen Presigned URL", "S3 SDK")
+
+    %% 4. Compute <-> Data (Worker)
+    Rel(worker, redis, "Pops Jobs", "Redis Protocol")
+    Rel(worker, db, "Upserts Tracks", "EF Core")
+    
+    %% 5. External Sync
+    Rel(worker, spotify, "Fetches Metadata", "REST")

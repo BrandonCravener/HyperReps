@@ -1,0 +1,36 @@
+graph TD
+    subgraph "Client Layer (Browser/Mobile)"
+        UI[User Interface]
+        Player[Audio Player Logic]
+        Player -- "1. Monitor ms & Skip" --> UI
+    end
+
+    subgraph "Application Layer"
+        API[HyperReps API]
+        Worker[Background Worker]
+    end
+
+    subgraph "Data Layer (Persistence)"
+        SQL[(Postgres: Main ERD)]
+    end
+
+    subgraph "Ephemeral Layer (Speed & Queues)"
+        Redis[(Redis)]
+    end
+
+    %% Flows
+    UI -- "2. Req Mix Data" --> API
+    API -- "3. Read Mix/Segments" --> SQL
+    
+    %% Sync Flow
+    UI -- "4. Trigger Sync" --> API
+    API -- "5. Add Job: 'SyncPlaylist'" --> Redis
+    API -- "6. Set status: 'QUEUED'" --> SQL
+    
+    Redis -- "7. Pop Job" --> Worker
+    Worker -- "8. Fetch Spotify Data" --> Spotify[Spotify API]
+    Worker -- "9. Upsert Tracks" --> SQL
+    Worker -- "10. Set status: 'IDLE'" --> SQL
+    
+    %% Real-time State (Optional)
+    Player -. "11. Report Current Song (Optional)" .-> Redis

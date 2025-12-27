@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/client/" />
+  <Folder Name="/docs/">
+    <File Path="IMPLEMENTATION_GUIDELINES.md" />
+  </Folder>
+  <Folder Name="/docs/architecture/">
+    <File Path="C4.mmd" />
+    <File Path="ERD.mmd" />
+    <File Path="playback_sequence.mmd" />
+    <File Path="web_worker_state.mmd" />
+  </Folder>
+  <Folder Name="/docs/ards/">
+    <File Path="ADR 001 - Playback State Management via Web Workers.md" />
+    <File Path="ADR 002 - Authentication Provider Strategy.md" />
+    <File Path="ADR 003 - Asynchronous Playlist Synchronization.md" />
+    <File Path="ADR 004 - Caching Strategy for External Metadata.md" />
+    <File Path="ADR 005 - Object Storage Strategy for User Content.md" />
+    <File Path="ADR 006 - Adoption of Clean Architecture.md" />
+    <File Path="ADR 007 - Frontend Framework Selection Angular." />
+    <File Path="ADR 008 - CQRS Implementation via MediatR.md" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="HyperReps.API/HyperReps.API.csproj" />
+    <Project Path="HyperReps.Application/HyperReps.Application.csproj" />
+    <Project Path="HyperReps.Domain/HyperReps.Domain.csproj" />
+    <Project Path="HyperReps.Infrastructure/HyperReps.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="HyperReps.UnitTests/HyperReps.UnitTests.csproj" />
+  </Folder>
+</Solution>
