@@ -1,0 +1,6 @@
+services:
+  hyperreps.api:
+    image: ${DOCKER_REGISTRY-}hyperrepsapi
+    build:
+      context: .
+      dockerfile: HyperReps.API/Dockerfile

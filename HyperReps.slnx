@@ -31,4 +31,7 @@
   <Folder Name="/test/">
     <Project Path="HyperReps.UnitTests/HyperReps.UnitTests.csproj" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>
