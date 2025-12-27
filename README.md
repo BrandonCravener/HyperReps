@@ -65,7 +65,7 @@ The frontend is a standalone **Angular** application that consumes the API as a 
 
 ## 🛠 Tech Stack
 
-* **Backend:** .NET 8, ASP.NET Core Web API
+* **Backend:** .NET 10, ASP.NET Core Web API
 * **Database:** PostgreSQL (Core Data), Redis (Cache & Queues)
 * **Storage:** Cloudflare R2 / AWS S3 (Presigned URLs)
 * **Frontend:** Angular, TypeScript, Spotify Web Playback SDK
@@ -76,7 +76,7 @@ The frontend is a standalone **Angular** application that consumes the API as a 
 ## 🚀 Getting Started
 
 ### Prerequisites
-* .NET 8 SDK
+* .NET 10 SDK
 * Node.js (LTS) & NPM
 * Docker Desktop (for Postgres & Redis)
 
