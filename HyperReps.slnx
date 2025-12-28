@@ -16,20 +16,20 @@
     <File Path="ADR 004 - Caching Strategy for External Metadata.md" />
     <File Path="ADR 005 - Object Storage Strategy for User Content.md" />
     <File Path="ADR 006 - Adoption of Clean Architecture.md" />
-    <File Path="ADR 007 - Frontend Framework Selection Angular." />
+    <File Path="ADR 007 - Frontend Framework Selection Angular" />
     <File Path="ADR 008 - CQRS Implementation via MediatR.md" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="HyperReps.API/HyperReps.API.csproj" />
-    <Project Path="HyperReps.Application/HyperReps.Application.csproj" />
-    <Project Path="HyperReps.Domain/HyperReps.Domain.csproj" />
-    <Project Path="HyperReps.Infrastructure/HyperReps.Infrastructure.csproj" />
+    <Project Path="src/HyperReps.API/HyperReps.API.csproj" />
+    <Project Path="src/HyperReps.Application/HyperReps.Application.csproj" />
+    <Project Path="src/HyperReps.Domain/HyperReps.Domain.csproj" />
+    <Project Path="src/HyperReps.Infrastructure/HyperReps.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="HyperReps.UnitTests/HyperReps.UnitTests.csproj" />
+    <Project Path="tests/HyperReps.UnitTests/HyperReps.UnitTests.csproj" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
