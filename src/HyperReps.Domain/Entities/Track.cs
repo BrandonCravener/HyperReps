@@ -20,7 +20,7 @@ namespace HyperReps.Domain.Entities
         private readonly List<PlaylistTrack> _includedInPlaylists = new();
         public IReadOnlyCollection<PlaylistTrack> IncludedInPlaylists => _includedInPlaylists.AsReadOnly();
 
-        private Track(): base(Guid.Empty) { }
+        private Track(): base() { }
 
         public Track(Guid id, string spotifyTrackId, string title, string artistName, string albumName,
                      string albumArtUrl, int durationMs, string? previewUrl) : base(id)

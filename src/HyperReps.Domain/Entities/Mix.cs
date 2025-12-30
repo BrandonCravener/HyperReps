@@ -17,7 +17,7 @@ namespace HyperReps.Domain.Entities
         private readonly List<MixSegment> _segments = new();
         public IReadOnlyCollection<MixSegment> Segments => _segments.OrderBy(s => s.SequenceOrder).ToList().AsReadOnly();
 
-        private Mix() : base(Guid.Empty) { }
+        private Mix() : base() { }
 
         public Mix(Guid id, Guid userId, string name, string? description, string? thumbnailUrl, bool isPublic)
             : base(id)

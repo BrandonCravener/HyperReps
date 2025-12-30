@@ -17,7 +17,7 @@ namespace HyperReps.Domain.Entities
         public Mix? Mix { get; private set; }
         public Track? Track { get; private set; }
 
-        private MixSegment() : base(Guid.Empty) { }
+        private MixSegment() : base() { }
 
         public MixSegment(Guid id, Guid mixId, Guid trackId, int startTimeMs, int endTimeMs, int sequenceOrder)
             : base(id)

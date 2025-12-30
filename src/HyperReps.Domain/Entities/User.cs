@@ -17,10 +17,10 @@ namespace HyperReps.Domain.Entities
         private readonly List<Mix> _mixes = new();
         public IReadOnlyCollection<Mix> Mixes => _mixes.AsReadOnly();
 
-        public readonly List<Playlist> _playlists = new();
+        private readonly List<Playlist> _playlists = new();
         public IReadOnlyCollection<Playlist> Playlists => _playlists.AsReadOnly();
 
-        private User() : base(Guid.Empty) { }
+        private User() : base() { }
 
         public User(Guid id, string spotifyId, string email, string displayName, string avatarUrl,
                     SpotifyCredentials spotifyCredentials) : base(id)
