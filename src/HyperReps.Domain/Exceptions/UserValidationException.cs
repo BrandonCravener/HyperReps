@@ -13,5 +13,8 @@
         public static UserValidationException InvalidRefreshToken() => new("Refresh token cannot be null or empty.");
         public static UserValidationException CredentialsRequired() => new("Credentials are required.");
         public static UserValidationException CredentialsMustBeDefined() => new("Credentials must be defined.");
+        public static UserValidationException MixAlreadyExists(Guid id) => new($"Mix with ID {id} already exists for this user.");
+        public static UserValidationException PlaylistAlreadyExists(Guid id) => new($"Playlist with ID {id} already exists for this user.");
+        public static UserValidationException NullEntity(string entityName) => new($"{entityName} cannot be null.");
     }
 }

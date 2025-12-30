@@ -4,7 +4,7 @@ namespace HyperReps.Domain.Common
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; private set; };
+        public Guid Id { get; private set; }
 
         protected BaseEntity() {
             Id = Guid.CreateVersion7();

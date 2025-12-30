@@ -9,9 +9,9 @@ namespace HyperReps.Domain.ValueObjects
     {
         public string AccessToken { get; }
         public string RefreshToken { get; }
-        public DateTime Expiry { get; }
+        public DateTimeOffset Expiry { get; }
 
-        public SpotifyCredentials(string accessToken, string refreshToken, DateTime expiry)
+        public SpotifyCredentials(string accessToken, string refreshToken, DateTimeOffset expiry)
         {
             if (string.IsNullOrWhiteSpace(accessToken)) throw UserValidationException.InvalidAccessToken();
             if (string.IsNullOrWhiteSpace(refreshToken)) throw UserValidationException.InvalidRefreshToken();

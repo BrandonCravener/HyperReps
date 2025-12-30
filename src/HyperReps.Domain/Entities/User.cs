@@ -50,15 +50,17 @@ namespace HyperReps.Domain.Entities
 
         public void AddMix(Mix mix)
         {
-            if (mix == null) throw new ArgumentNullException(nameof(mix));
-            if (_mixes.Contains(mix)) throw new InvalidOperationException("Mix already exists for this user.");
+            if (mix == null) throw UserValidationException.NullEntity(nameof(Mix));
+            if (_mixes.Any(m => m.Id == mix.Id)) throw UserValidationException.MixAlreadyExists(mix.Id);
+
             _mixes.Add(mix);
         }
 
         public void AddPlaylist(Playlist playlist)
         {
-            if (playlist == null) throw new ArgumentNullException(nameof(playlist));
-            if (_playlists.Contains(playlist)) throw new InvalidOperationException("Playlist already exists for this user.");
+            if (playlist == null) throw UserValidationException.NullEntity(nameof(Playlist));
+            if (_playlists.Any(p => p.Id == playlist.Id)) throw UserValidationException.PlaylistAlreadyExists(playlist.Id);
+
             _playlists.Add(playlist);
         }
     }
