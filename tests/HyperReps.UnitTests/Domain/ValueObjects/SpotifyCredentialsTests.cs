@@ -17,11 +17,10 @@ namespace HyperReps.UnitTests.Domain.ValueObjects
         [Fact]
         public void IsExpired_ShouldReturnFalse_WhenExpiryIsInFuture()
         {
-            // Arrange
+
             var future = DateTimeOffset.UtcNow.AddMinutes(20);
             var creds = new SpotifyCredentials("access", "refresh", future);
 
-            // Act
             Assert.False(creds.IsExpired());
         }
 

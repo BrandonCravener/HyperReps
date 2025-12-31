@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HyperReps.Domain\HyperReps.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

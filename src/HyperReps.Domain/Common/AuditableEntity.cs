@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HyperReps.Domain.Common
+﻿namespace HyperReps.Domain.Common
 {
     public abstract class AuditableEntity : BaseEntity
     {
