@@ -24,6 +24,8 @@ erDiagram
         string album_art_url
         int duration_ms
         string preview_url "Optional 30s preview"
+        timestamp created_at
+        timestamp updated_at
     }
 
     %% PLAYLIST IMPORTING
@@ -38,14 +40,15 @@ erDiagram
         boolean is_sync_active "If true, auto-update from Spotify"
         string sync_status "IDLE, QUEUED, SYNCING, FAILED"
         string last_error_message "For UI feedback if sync fails"
-        timestamp last_synced_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     %% JOIN TABLE: PLAYLIST <-> TRACK
     PLAYLIST_TRACK {
         uuid playlist_id PK, FK
         uuid track_id PK, FK
-        int added_at_timestamp
+        timestamp added_at
     }
 
     %% MIX CREATION
@@ -70,7 +73,6 @@ erDiagram
         int start_time_ms "Crop start point"
         int end_time_ms "Crop end point"
         int sequence_order "Position: 0, 1, 2..."
-        int crossfade_duration_ms
     }
 
     %% RELATIONSHIPS
