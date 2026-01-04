@@ -20,12 +20,11 @@ This document outlines the strict rules for contributing to the HyperReps backen
 * **Exceptions:** Define custom exceptions here (e.g., `MixValidationException`). Do not throw generic `System.Exception`.
 
 ### 🧠 Application Layer (The Logic)
-* **CQRS:** Use Commands for writes, Queries for reads.
-* **DTOs:** Always return DTOs, never Domain Entities.
-    * *Why?* It prevents the API from accidentally exposing internal state or creating circular references (JSON serialization issues).
+* **CQRS:** Use Wolverine Handlers (Commands for writes, Queries for reads).
+    * Handlers are standard C# classes (POCOs) or static methods.
+    * Dependencies are injected as method arguments (Method Injection).
 * **Validation:** Use `FluentValidation` validators for every Command.
-    * Validation logic belongs here, NOT in the Controller.
-* **Interfaces:** Define `IRepository` or `ISpotifyService` interfaces here. Do not implement them here.
+    * Validation is enforced automatically by Wolverine middleware.
 
 ### 🏗 Infrastructure Layer (The Plumbing)
 * **Repositories:** Implement the interfaces from *Application*.
@@ -35,19 +34,18 @@ This document outlines the strict rules for contributing to the HyperReps backen
 
 ### 🔌 API Layer (The Interface)
 * **Controllers:** Must be "Thin".
-    * They should strictly handle HTTP concerns (Status Codes, Headers) and delegate work to `_mediator`.
-    * ❌ **No business logic in Controllers.**
+    * They should strictly handle HTTP concerns and delegate work to `IMessageBus`.
 
-## 3. Workflow: Adding a New Feature
+### 3. Workflow: Adding a New Feature
 
 When adding a feature (e.g., "Rename Mix"), follow this order:
 
-1.  **Domain:** Add the `Rename()` method to the `Mix` entity. Ensure it enforces invariants (e.g., name cannot be empty).
+1.  **Domain:** Add the `Rename()` method to the `Mix` entity.
 2.  **Application:**
-    * Create `RenameMixCommand` (DTO).
-    * Create `RenameMixCommandValidator` (FluentValidation).
-    * Create `RenameMixCommandHandler` (Logic: Load Entity -> Call Domain Method -> Save).
-3.  **API:** Add the endpoint `PATCH /mixes/{id}/name` to the Controller.
+    * Create `RenameMixCommand` (Record).
+    * Create `RenameMixCommandValidator` (AbstractValidator).
+    * Create `RenameMixHandler` (Logic: `public void Handle(RenameMixCommand cmd, IMixRepository repo)`).
+3.  **API:** Add the endpoint `PATCH /mixes/{id}/name` to the Controller and call `_bus.InvokeAsync(command)`.
 
 ## 4. Testing Strategy
 
