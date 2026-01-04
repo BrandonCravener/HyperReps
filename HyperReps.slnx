@@ -9,15 +9,15 @@
     <File Path="docs/architecture/playback_sequence.mmd" />
     <File Path="docs/architecture/web_worker_state.mmd" />
   </Folder>
-  <Folder Name="/docs/ards/">
-    <File Path="docs/ards/ADR 001 - Playback State Management via Web Workers.md" />
-    <File Path="docs/ards/ADR 002 - Authentication Provider Strategy.md" />
-    <File Path="docs/ards/ADR 003 - Asynchronous Playlist Synchronization.md" />
-    <File Path="docs/ards/ADR 004 - Caching Strategy for External Metadata.md" />
-    <File Path="docs/ards/ADR 005 - Object Storage Strategy for User Content.md" />
-    <File Path="docs/ards/ADR 006 - Adoption of Clean Architecture.md" />
-    <File Path="docs/ards/ADR 007 - Frontend Framework Selection Angular" />
-    <File Path="docs/ards/ADR 008 - CQRS Implementation via MediatR.md" />
+  <Folder Name="/docs/adrs/">
+    <File Path="docs/adrs/ADR 001 - Playback State Management via Web Workers.md" />
+    <File Path="docs/adrs/ADR 002 - Authentication Provider Strategy.md" />
+    <File Path="docs/adrs/ADR 003 - Asynchronous Playlist Synchronization.md" />
+    <File Path="docs/adrs/ADR 004 - Caching Strategy for External Metadata.md" />
+    <File Path="docs/adrs/ADR 005 - Object Storage Strategy for User Content.md" />
+    <File Path="docs/adrs/ADR 006 - Adoption of Clean Architecture.md" />
+    <File Path="docs/adrs/ADR 007 - Frontend Framework Selection Angular.md" />
+    <File Path="docs/adrs/ADR 008 - CQRS Implementation via Wolverine.md" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />

@@ -2,6 +2,11 @@ using HyperReps.Infrastructure.Persistence;
 using HyperReps.Infrastructure.Persistence.Repositories;
 using HyperReps.Application.Common.Interfaces.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Wolverine;
+using Wolverine.Postgresql;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.FluentValidation;
+using HyperReps.Application.Common.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +35,16 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMixRepository, MixRepository>();
 builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+
+builder.Host.UseWolverine(opts =>
+{
+    opts.Discovery.IncludeAssembly(typeof(IUserRepository).Assembly);
+    opts.PersistMessagesWithPostgresql(connectionString!, "wolverine");
+    opts.UseEntityFrameworkCoreTransactions();
+    opts.Policies.AutoApplyTransactions();
+    opts.Policies.AddMiddleware(typeof(LoggingMiddleware));
+    opts.UseFluentValidation();
+});
 
 var app = builder.Build();
 
