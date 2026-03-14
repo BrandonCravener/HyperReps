@@ -64,11 +64,13 @@ namespace HyperReps.UnitTests.Domain.Entities
             var newName = "New Name";
             var newAvatar = "new_pfp";
 
+            var newEmail = "new@email.com";
 
-            user.UpdateProfile(newName, newAvatar);
+            user.UpdateProfile(newName, newEmail, newAvatar);
 
 
             Assert.Equal(newName, user.DisplayName);
+            Assert.Equal(newEmail, user.Email);
             Assert.Equal(newAvatar, user.AvatarUrl);
         }
 
@@ -82,7 +84,7 @@ namespace HyperReps.UnitTests.Domain.Entities
             var user = new User(Guid.NewGuid(), "sid", "email", "Old Name", "old_pfp", _validCredentials);
 
 
-            Assert.Throws<UserValidationException>(() => user.UpdateProfile(invalidName!, "avatar"));
+            Assert.Throws<UserValidationException>(() => user.UpdateProfile(invalidName!, "email", "avatar"));
         }
 
         [Fact]
