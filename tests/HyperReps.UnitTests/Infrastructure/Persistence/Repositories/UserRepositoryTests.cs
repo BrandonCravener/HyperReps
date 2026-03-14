@@ -121,7 +121,7 @@ namespace HyperReps.UnitTests.Infrastructure.Persistence.Repositories
             {
                 var repository = new UserRepository(context);
                 var userToUpdate = await repository.GetByIdAsync(userId);
-                userToUpdate!.UpdateProfile("Updated Name", "new_avatar_url");
+                userToUpdate!.UpdateProfile("Updated Name", "updated_email@example.com", "new_avatar_url");
                 await repository.UpdateAsync(userToUpdate);
             }
 

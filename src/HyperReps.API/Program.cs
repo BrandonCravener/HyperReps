@@ -1,40 +1,96 @@
+using HyperReps.Application.Common.Interfaces.Persistence;
+using HyperReps.Application.Common.Interfaces.Services;
+using HyperReps.Application.Common.Middleware;
 using HyperReps.Infrastructure.Persistence;
 using HyperReps.Infrastructure.Persistence.Repositories;
-using HyperReps.Application.Common.Interfaces.Persistence;
+using HyperReps.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Client.AspNetCore;
 using Wolverine;
-using Wolverine.Postgresql;
 using Wolverine.EntityFrameworkCore;
 using Wolverine.FluentValidation;
-using HyperReps.Application.Common.Middleware;
+using Wolverine.Postgresql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddAntiforgery();
+
+builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 // Add PostgreSQL EF Core support
 var connectionString = builder.Configuration.GetConnectionString("HyperRepsDatabase");
-builder.Services.AddDbContextPool<HyperRepsContext>(opt => 
-    opt.UseNpgsql(connectionString, npgsqlOptions =>
+builder.Services.AddDbContextPool<HyperRepsContext>(opt =>
+{
+    opt.UseNpgsql(
+        connectionString,
+        npgsqlOptions =>
+        {
+            // Use split query for related collections to avoid Cartesian explosion
+            npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+        }
+    );
+    opt.UseOpenIddict();
+});
+
+builder
+    .Services.AddAuthentication(opts =>
     {
-        npgsqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorCodesToAdd: null);
+        opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        opts.DefaultChallengeScheme = OpenIddictClientAspNetCoreDefaults.AuthenticationScheme;
+    })
+    .AddCookie(
+        CookieAuthenticationDefaults.AuthenticationScheme,
+        opts =>
+        {
+            opts.LoginPath = "/api/auth/login";
+            opts.LogoutPath = "/auth/auth/logout";
+        }
+    );
 
-        // Use split query for related collections to avoid Cartesian explosion
-        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-    }));
+// Configure OpenIddict for Spotify authentication
+var spotifyConfiguration = builder.Configuration.GetRequiredSection("Spotify");
+builder
+    .Services.AddOpenIddict()
+    .AddCore(opts =>
+    {
+        opts.UseEntityFrameworkCore().UseDbContext<HyperRepsContext>();
+    })
+    .AddClient(opts =>
+    {
+        opts.AllowAuthorizationCodeFlow();
 
+        if (builder.Environment.IsDevelopment())
+        {
+            opts.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
+        }
+
+        opts.UseAspNetCore().EnableRedirectionEndpointPassthrough();
+
+        opts.UseSystemNetHttp();
+
+        opts.UseWebProviders()
+            .AddSpotify(opts =>
+            {
+                opts.SetClientId(spotifyConfiguration["ClientId"]!)
+                    .SetClientSecret(spotifyConfiguration["ClientSecret"]!)
+                    .SetRedirectUri("api/auth/callback")
+                    .AddScopes(["user-read-email", "playlist-read-private", "streaming"]);
+            });
+    });
+
+// Register repositories for dependency injection
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMixRepository, MixRepository>();
 builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+
+builder.Services.AddScoped<ISpotifyAuthService, SpotifyAuthService>();
 
 builder.Host.UseWolverine(opts =>
 {
@@ -73,6 +129,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
