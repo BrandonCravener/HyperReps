@@ -35,8 +35,8 @@ The backend logic is split into four projects to ensure separation of concerns.
 ### 2. `HyperReps.Application` (Orchestration)
 * **Role:** Defines *what* the system does. Contains CQRS Handlers, DTOs, and Interfaces.
 * **Patterns:**
-    * **CQRS:** Uses **MediatR** to handle Commands (Writes) and Queries (Reads).
-    * **Validation:** Uses **FluentValidation** via Pipeline Behaviors.
+    * **CQRS:** Uses **Wolverine** to handle Commands (Writes) and Queries (Reads).
+    * **Validation:** Uses **FluentValidation** via Wolverine Middleware.
 * **Dependencies:** `Domain`.
 
 ### 3. `HyperReps.Infrastructure` (Implementation)
@@ -49,7 +49,7 @@ The backend logic is split into four projects to ensure separation of concerns.
 * **Dependencies:** `Application`, `Domain`.
 
 ### 4. `HyperReps.API` (Presentation)
-* **Role:** The entry point. Contains "Thin Controllers" that delegate requests to MediatR.
+* **Role:** The entry point. Contains "Thin Controllers" that delegate requests to local bus (Wolverine).
 * **Dependencies:** `Application`, `Infrastructure`.
 
 ---

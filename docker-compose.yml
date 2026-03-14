@@ -3,4 +3,26 @@ services:
     image: ${DOCKER_REGISTRY-}hyperrepsapi
     build:
       context: .
-      dockerfile: HyperReps.API/Dockerfile
+      dockerfile: src/HyperReps.API/Dockerfile
+    depends_on:
+      - db
+    networks:
+      - backend
+  db:
+    image: postgres:18.1
+    container_name: hyperreps_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: hyperreps
+      POSTGRES_USER: hyperreps_user
+      POSTGRES_PASSWORD: development_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - backend
+volumes:
+  postgres_data:
+networks:
+  backend:
